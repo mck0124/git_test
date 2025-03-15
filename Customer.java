@@ -37,6 +37,7 @@ public class Customer {
             }
             
             writer = new FileWriter(fileName, true);
+            String reservStr = (reservID != null) ? reservID.getReservID() + "" : "없음";
             writer.write("이름: " + name + ", 전화번호: " + phoneNum + ", 예약번호: " + reservID.toString() + ", 예약 인원: " + members + "\n");
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,10 +56,24 @@ public class Customer {
         Scanner sc = new Scanner(System.in);
         System.out.println("이름: ");
         name = sc.nextLine();
-        System.out.println("전화번호: ");
-        phoneNum = sc.nextLine();
+        System.out.println("전화번호 (ex. 010-1234-5678): ");
+        while(true) {
+        	phoneNum = sc.nextLine();
+        	if (phoneNum.matches("\\d{3}-\\d{4}-\\d{4}")) break; //전화번호 형식이 올바른지 확인
+        	else {
+        		System.out.println("전화번호 형식이 잘못되었습니다.\n다시 입력해 주십시오");
+        	}
+        }
+        
         System.out.println("예약 인원: ");
-        members = Integer.parseInt(sc.nextLine());
+        try {
+        	members = Integer.parseInt(sc.nextLine());
+        	if (members <= 0) throw new NumberFormatException(); //인원 숫자가 양수임을 확인
+		} catch (Exception e) {
+			System.out.println("유효하지 않은 인원입니다. 1명으로 설정됩니다.");
+			members = 1;
+		}
+        
     }
     
 	// 고객 정보 출력
