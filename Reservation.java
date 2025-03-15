@@ -2,8 +2,8 @@ import java.time.LocalDateTime;
 import java.lang.System;
 
 public class Reservation {
-    // ÇÊµå
-    // °í°´, ¿¹¾à ID, ¹æ, Ã¼Å©ÀÎ ³¯Â¥, Ã¼Å©¾Æ¿ô ³¯Â¥
+    // í•„ë“œ
+    // ê³ ê°, ì˜ˆì•½ ID, ë°©, ì²´í¬ì¸ ë‚ ì§œ, ì²´í¬ì•„ì›ƒ ë‚ ì§œ
     private Customer customer;
     private int reservID;
     private Room room;
@@ -11,13 +11,13 @@ public class Reservation {
     private LocalDateTime endDate;
     private int members;
     private int visitCount;
-    private static int nextReservID = 00001; // ¿¹¾à ID ÀÚµ¿ Áõ°¡¸¦ À§ÇÑ Á¤Àû º¯¼ö
+    private static int nextReservID = 00001; // ì˜ˆì•½ ID ìë™ ì¦ê°€ë¥¼ ìœ„í•œ ì •ì  ë³€ìˆ˜
 
     public Reservation() {
-        // default»ı¼ºÀÚ
+        // defaultìƒì„±ì
     }
 
-    // »ı¼ºÀÚ
+    // ìƒì„±ì
     public Reservation(Customer customer, int reservID, Room room, LocalDateTime startDate, LocalDateTime endDate) {
         this.customer = customer;
         this.reservID = reservID;
@@ -28,30 +28,32 @@ public class Reservation {
         this.visitCount = 0;
     }
 
-    // ¿ÀÆÛ·¹ÀÌ¼Ç
-    // ¿¹¾àÃß°¡
+    // ì˜¤í¼ë ˆì´ì…˜
+    // ì˜ˆì•½ì¶”ê°€
     public void addReserve(Customer customer, Room room, int members, LocalDateTime startDate, LocalDateTime endDate) {
         this.customer = customer;
         this.room = room;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.room.setFull(true); // ¹æÀÌ ¿¹¾àµÇ¾úÀ½À» Ç¥½Ã
+        this.room.setFull(true); // ë°©ì´ ì˜ˆì•½ë˜ì—ˆìŒì„ í‘œì‹œ
         this.members = members;
         this.visitCount++;
-        this.reservID = nextReservID++; // ¿¹¾à ID ÀÚµ¿ »ı¼º
+        this.reservID = nextReservID++; // ì˜ˆì•½ ID ìë™ ìƒì„±
     }
 
     public void printReserv() {
-        System.out.println("¿¹¾à ³»¿ª Ãâ·Â:");
-        System.out.println("°í°´ ÀÌ¸§: " + customer.getName());
-        System.out.println("¿¹¾à ID: " + reservID);
-        System.out.println("¹æ¹øÈ£: " + room.getRoomID());
-        System.out.println("Ã¼Å©ÀÎ ³¯Â¥: " + startDate);
-        System.out.println("Ã¼Å©¾Æ¿ô ³¯Â¥: " + endDate);
-        System.out.println("°¡°İ: " + room.getPrice());
+    	System.out.println(this);
     }
 
-    public void deleteReserv() {
+    @Override
+	public String toString() {
+		long days = java.time.Duration.between(startDate, endDate).toDays();
+		int totalPrice = room.getPrice()*(int)days;
+		return "ì˜ˆì•½ ID: " + reservID + ", ê³ ê°: " + customer.getName() + ", ë°©: " + room.getRoomID() + ", ì²´í¬ì¸: " + startDate + ", ì²´í¬ì•„ì›ƒ: " + endDate + ", ì´ ê°€ê²©: " + totalPrice + "ì›";
+	}
+
+	public void deleteReserv() {
+		if (room != null) room.setFull(false);
         this.customer = null;
         this.room = null;
         this.startDate = null;
