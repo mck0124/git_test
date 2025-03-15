@@ -8,10 +8,10 @@ public class Room {
     private int price;
     private boolean isFull;
     
-    // default »ı¼ºÀÚ
+    // default ìƒì„±ì
     public Room() {}
 
-    // »ı¼ºÀÚ
+    // ìƒì„±ì
     public Room(int roomID, String type, int fullMember, int price, boolean isFull) {
         super();
         this.roomID = roomID;
@@ -21,22 +21,26 @@ public class Room {
         this.isFull = isFull;
     }
     
-	// ¹æ Á¤º¸ Ãâ·Â
+	// ë°© ì •ë³´ ì¶œë ¥
     public void printRoomInfo() {
-        System.out.println("¹æ¹øÈ£: " + roomID);
-        System.out.println("Å¸ÀÔ: " + type);
-        System.out.println("¹æ Á¤¿ø: " + fullMember);
-        System.out.println("°¡°İ: " + price);
-        System.out.println("¿¹¾à°¡´É¿©ºÎ: " + isFull);
+        System.out.println("ë°©ë²ˆí˜¸: " + roomID);
+        System.out.println("íƒ€ì…: " + type);
+        System.out.println("ë°© ì •ì›: " + fullMember);
+        System.out.println("ê°€ê²©: " + price);
+        System.out.println("ì˜ˆì•½ê°€ëŠ¥ì—¬ë¶€: " + (isFull ? "ë¶ˆê°€" : "ê°€ëŠ¥"));
     }
     
-	// ¹æ ¿¹¾à °¡´É ¿©ºÎ È®ÀÎ
-    public boolean roomAvailable(String startDate, String endDate, String roomType, boolean isFull) { 
-        if (this.type.equals(roomType) && !this.isFull) {
-			printRoomInfo();
-            return true;
-        }
-        return false;
+	// ë°© ì˜ˆì•½ ê°€ëŠ¥ ì—¬ë¶€ í™•ì¸
+//    public boolean roomAvailable(String startDate, String endDate, String roomType, boolean isFull) { 
+//        if (this.type.equals(roomType) && !this.isFull) {
+//			printRoomInfo();
+//            return true;
+//        }
+//        return false;
+//    }
+    
+    public boolean isAvailable() {
+    	return !isFull;
     }
 
     public int getRoomID() {
