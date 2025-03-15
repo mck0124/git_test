@@ -1,9 +1,8 @@
-package KOSA.project;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -13,7 +12,7 @@ public class Main {
         List<Customer> customers = new ArrayList<>();
         List<Room> rooms = new ArrayList<>();
         List<Reservation> reservations = new ArrayList<>();
-        ReservationSystem system = new ReservationSystem();
+        ReservationSystem system = new ReservationSystem(reservations, rooms);
         
         //초기 방 데이터 추가 (테스트용)
        rooms.add(new Room(101, "Single", 2, 50000, false));
@@ -23,7 +22,7 @@ public class Main {
        
        
        //날짜 형식 지정 ex) 2025-03-20 14:00
-       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd HH:mm");
+       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         
         while (true) {
             System.out.println("메뉴를 선택하세요:");
@@ -59,7 +58,7 @@ public class Main {
                     //예약 날짜 입력
                     System.out.println("체크인 날짜를 입력하세요 (ex. 2025-03-20 14:00): ");
                     String startDateStr = sc.nextLine();
-                    System.out.println("체크아 날짜를 입력하세요 (ex. 2025-03-20 14:00): ");
+                    System.out.println("체크아웃 날짜를 입력하세요 (ex. 2025-03-20 14:00): ");
                     String endDateStr = sc.nextLine();
                    
                     LocalDateTime startDate, endDate;
@@ -73,15 +72,12 @@ public class Main {
                 	  	   break;
                 	    }
                     } catch (Exception e) {
-					System.out.println("날짜 형식이 잘못되었습니다. (ex. 2025-03-20 14:00)");
-				  	break;
+                    	System.out.println("날짜 형식이 잘못되었습니다. (ex. 2025-03-20 14:00)");
+                    	break;
                     }
                     
                     //해당 날짜에 예약 가능한 방 목록 (필터링)
-                    List<Room> availableRooms = rooms.stream()
-                		    .filter(room -> isRoomAvailable(room, startDate, endDate, reservations))
-                		    .collect(Collectors.toList());
-                   
+                    Map<String, Long> availableRooms = system.getAvailableRoomCounts(startDate, endDate);
                     if (availableRooms.isEmpty()) {
                  	    System.out.println(startDate.toLocalDate() + "에 예약 가능한 방이 없습니다.");
                  	    break;
@@ -89,43 +85,49 @@ public class Main {
                    
                     //방 타입별로 그룹화 해서 출력하기
                     System.out.println(startDate.toLocalDate() + "에 예약 가능한 방: ");
-                    availableRooms.stream()
-                   		   	.collect(Collectors.groupingBy(Room::getType, Collectors.counting()))
-                   			.forEach((type, count) -> System.out.println(type + "룸 " + count + "개 남음"));;
+                    availableRooms.forEach((type, count) -> 
+                    	System.out.println(type + "룸 " + count + "개 남음"));
                   
                     //방 타입 선택
                     System.out.println("예약할 방 타입을 입력하세요 (single/double)");
                     String roomType = sc.nextLine();
-                    Room selectedRoom = availableRooms.stream()
-                	 	   .filter(r -> r.getType().equals(roomType))
+                    Room selectedRoom = system.getAvailableRooms(startDate, endDate).stream()
+                	 	   .filter(r -> r.getType().equalsIgnoreCase(roomType))
                 	 	   .findFirst().orElse(null);
                    
                     if (selectedRoom == null) {
                 	    System.out.println("선택하신 방은 예약하실 수 없습니다.");
+                	    break;
                     }
                    
                     //예약 생성
-                    Reservation reservation = new Reservation();
-                    reservation.addReserve(foundCustomer, selectedRoom, foundCustomer.getMembers(), startDate, endDate);
-                    reservations.add(reservation);
+                    Reservation reservation = system.addReservation(foundCustomer, selectedRoom, foundCustomer.getMembers(), startDate, endDate);
                     foundCustomer.setReservID(reservation);
                     System.out.println("예약이 완료되었습니다.\n예약 ID: " + reservation.getReservID());
                     break;
                     
                 case "3": //예약 정보 출력 
-                	reservations .forEach(Reservation::printReserv);
+                	reservations.forEach(Reservation::printReserv);
                     break;
                     
                 case "4": //체크인 
                 	System.out.println("체크인할 예약 ID를 입력하세요: ");
-                	int checkInID = Integer.parseInt(sc.nextLine());
-                	System.out.println(checkInID);
+                	try {
+						int checkInId = Integer.parseInt(sc.nextLine());
+						system.checkIn(checkInId);
+					} catch (NumberFormatException e) {
+						System.out.println("유효한 예약 ID(숫자)를 입력하세요.");
+					}
                     break;
                     
                 case "5": //체크아웃 
                     System.out.println("체크아웃할 예약 ID를 입력하세요: ");
-                    int checkOutID = Integer.parseInt(sc.nextLine());
-                    System.out.println(checkOutID);
+                    try {
+						int checkOutId = Integer.parseInt(sc.nextLine());
+						system.checkOut(checkOutId);
+					} catch (NumberFormatException e) {
+						System.out.println("유효한 예약 ID(숫자)를 입력하세요.");
+					}
                     break;
                     
                 case "6": //고객 정보 등록 
