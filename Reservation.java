@@ -9,6 +9,9 @@ public class Reservation {
     private Room room;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private int members;
+    private int visitCount;
+    private static int nextReservID = 00001; // 예약 ID 자동 증가를 위한 정적 변수
 
     public Reservation() {
         // default생성자
@@ -21,15 +24,21 @@ public class Reservation {
         this.room = room;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.members = 0;
+        this.visitCount = 0;
     }
 
     // 오퍼레이션
     // 예약추가
-    public void addReserve(Customer customer, Room room, LocalDateTime startDate, LocalDateTime endDate) {
+    public void addReserve(Customer customer, Room room, int members, LocalDateTime startDate, LocalDateTime endDate) {
         this.customer = customer;
         this.room = room;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.room.setFull(true); // 방이 예약되었음을 표시
+        this.members = members;
+        this.visitCount++;
+        this.reservID = nextReservID++; // 예약 ID 자동 생성
     }
 
     public void printReserv() {
@@ -49,7 +58,6 @@ public class Reservation {
         this.endDate = null;
     }
 
-    
     // Getters and Setters
     public Customer getCustomer() {
         return customer;
@@ -89,5 +97,21 @@ public class Reservation {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public int getMembers() {
+        return members;
+    }
+
+    public void setMembers(int members) {
+        this.members = members;
+    }
+
+    public int getVisitCount() {
+        return visitCount;
+    }
+
+    public void setVisitCount(int visitCount) {
+        this.visitCount = visitCount;
     }
 }
