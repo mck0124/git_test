@@ -1,0 +1,144 @@
+package KOSA.project;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        List<Customer> customers = new ArrayList<>();
+        List<Room> rooms = new ArrayList<>();
+        List<Reservation> reservations = new ArrayList<>();
+        ReservationSystem system = new ReservationSystem();
+        
+        //초기 방 데이터 추가 (테스트용)
+       rooms.add(new Room(101, "Single", 2, 50000, false));
+       rooms.add(new Room(102, "Single", 2, 50000, false));
+       rooms.add(new Room(201, "Double", 4, 80000, false));
+       rooms.add(new Room(202, "Double", 4, 80000, false));
+       
+       
+       //날짜 형식 지정 ex) 2025-03-20 14:00
+       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd HH:mm");
+        
+        while (true) {
+            System.out.println("메뉴를 선택하세요:");
+            System.out.println("1. 고객 정보 입력");
+            System.out.println("2. 방 예약");
+            System.out.println("3. 예약 정보 출력");
+            System.out.println("4. 체크인");
+            System.out.println("5. 체크아웃");
+            System.out.println("6. 고객 정보 등록");
+            System.out.println("7. 종료");
+
+            String menu = sc.nextLine();
+
+            switch (menu) {
+                case "1": //고객 정보 입력 
+                	Customer customer = new Customer();
+                	customer.inputInfo();
+                	customers.add(customer);
+                    break;
+                    
+                case "2": //방 예약 
+                	//고객 전화번호 입력 (+존재 여부 확인)
+                    System.out.println("예약할 고객 전화번호를 입력하세요: ");
+                    String phoneNum = sc.nextLine();
+                    Customer foundCustomer = customers.stream()
+                    		.filter(c -> c.getPhoneNum().equals(phoneNum))
+                    		.findFirst().orElse(null);
+                    if (foundCustomer == null) {
+                    	System.out.println("고객을 찾을 수 없습니다.");
+                    	break;
+                    }
+                    
+                    //예약 날짜 입력
+                    System.out.println("체크인 날짜를 입력하세요 (ex. 2025-03-20 14:00): ");
+                    String startDateStr = sc.nextLine();
+                    System.out.println("체크아 날짜를 입력하세요 (ex. 2025-03-20 14:00): ");
+                    String endDateStr = sc.nextLine();
+                   
+                    LocalDateTime startDate, endDate;
+                    try {
+                	    startDate = LocalDateTime.parse(startDateStr, formatter);
+                	    endDate = LocalDateTime.parse(endDateStr, formatter);
+                	    
+                	    // 유효한 예약 날짜인지 확인 절차 (오입력 방지)
+                	    if (startDate.isAfter(endDate)||startDate.isBefore(LocalDateTime.now())) {
+                	 	   System.out.println("유효하지 않은 날짜입니다. (체크인, 체크아웃 날짜를 다시 확인 해주십시오)");
+                	  	   break;
+                	    }
+                    } catch (Exception e) {
+					System.out.println("날짜 형식이 잘못되었습니다. (ex. 2025-03-20 14:00)");
+				  	break;
+                    }
+                    
+                    //해당 날짜에 예약 가능한 방 목록 (필터링)
+                    List<Room> availableRooms = rooms.stream()
+                		    .filter(room -> isRoomAvailable(room, startDate, endDate, reservations))
+                		    .collect(Collectors.toList());
+                   
+                    if (availableRooms.isEmpty()) {
+                 	    System.out.println(startDate.toLocalDate() + "에 예약 가능한 방이 없습니다.");
+                 	    break;
+                    }
+                   
+                    //방 타입별로 그룹화 해서 출력하기
+                    System.out.println(startDate.toLocalDate() + "에 예약 가능한 방: ");
+                    availableRooms.stream()
+                   		   	.collect(Collectors.groupingBy(Room::getType, Collectors.counting()))
+                   			.forEach((type, count) -> System.out.println(type + "룸 " + count + "개 남음"));;
+                  
+                    //방 타입 선택
+                    System.out.println("예약할 방 타입을 입력하세요 (single/double)");
+                    String roomType = sc.nextLine();
+                    Room selectedRoom = availableRooms.stream()
+                	 	   .filter(r -> r.getType().equals(roomType))
+                	 	   .findFirst().orElse(null);
+                   
+                    if (selectedRoom == null) {
+                	    System.out.println("선택하신 방은 예약하실 수 없습니다.");
+                    }
+                   
+                    //예약 생성
+                    Reservation reservation = new Reservation();
+                    reservation.addReserve(foundCustomer, selectedRoom, foundCustomer.getMembers(), startDate, endDate);
+                    reservations.add(reservation);
+                    foundCustomer.setReservID(reservation);
+                    System.out.println("예약이 완료되었습니다.\n예약 ID: " + reservation.getReservID());
+                    break;
+                    
+                case "3": //예약 정보 출력 
+                	reservations .forEach(Reservation::printReserv);
+                    break;
+                    
+                case "4": //체크인 
+                	System.out.println("체크인할 예약 ID를 입력하세요: ");
+                	int checkInID = Integer.parseInt(sc.nextLine());
+                	System.out.println(checkInID);
+                    break;
+                    
+                case "5": //체크아웃 
+                    System.out.println("체크아웃할 예약 ID를 입력하세요: ");
+                    int checkOutID = Integer.parseInt(sc.nextLine());
+                    System.out.println(checkOutID);
+                    break;
+                    
+                case "6": //고객 정보 등록 
+                    customers.forEach(Customer::saveInfo);
+                    break;
+                    
+                case "7": //종료 
+                    System.out.println("프로그램을 종료합니다.");
+                    return;
+                    
+                default:
+                    System.out.println("잘못된 선택입니다. 다시 시도하세요.");
+            }
+        }
+    }
+}
