@@ -11,26 +11,25 @@ public class Reservation {
     private LocalDateTime endDate;
     private int members;
     private int visitCount;
-    private static int nextReservID = 00001; // 예약 ID 자동 증가를 위한 정적 변수
+    private static int nextReservID = 1; // 예약 ID 자동 증가를 위한 정적 변수
 
     public Reservation() {
         // default생성자
     }
 
     // 생성자
-    public Reservation(Customer customer, int reservID, Room room, LocalDateTime startDate, LocalDateTime endDate) {
+    public Reservation(Customer customer, Room room, int members, LocalDateTime startDate, LocalDateTime endDate) {
         this.customer = customer;
-        this.reservID = reservID;
         this.room = room;
+        this.members = members;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.members = 0;
-        this.visitCount = 0;
+        this.reservID = nextReservID++; // 예약 ID 자동 생성
     }
 
     // 오퍼레이션
     // 예약추가
-    public void addReserve(Customer customer, Room room, int members, LocalDateTime startDate, LocalDateTime endDate) {
+    public void addReservation(Customer customer, Room room, int members, LocalDateTime startDate, LocalDateTime endDate) {
         this.customer = customer;
         this.room = room;
         this.startDate = startDate;

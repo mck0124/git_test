@@ -12,33 +12,32 @@ public class Customer {
     
     FileWriter writer = null;
 
-	// default ìƒì„±ì
+	// default »ı¼ºÀÚ
 	public Customer() {}
     
-	// ìƒì„±ì
+	// »ı¼ºÀÚ
     public Customer(String name, String phoneNum) {
         super();
         this.name = name;
         this.phoneNum = phoneNum;
     }
     
-	// ê³ ê° ì •ë³´ ì €ì¥
+	// °í°´ Á¤º¸ ÀúÀå
     public void saveInfo() {
         try {
             String fileName;
             visitCount++;
             
             if (visitCount == 1) {
-                fileName = "ì‹ ê·œê³ ê° ë¦¬ìŠ¤íŠ¸.txt";
+                fileName = "½Å±Ô°í°´ ¸®½ºÆ®.txt";
             } else if (visitCount == 2) {
-                fileName = "ì¬ë°©ë¬¸ê³ ê° ë¦¬ìŠ¤íŠ¸.txt";
+                fileName = "Àç¹æ¹®°í°´ ¸®½ºÆ®.txt";
             } else {
-                fileName = "ë‹¨ê³¨ê³ ê° ë¦¬ìŠ¤íŠ¸.txt";
+                fileName = "´Ü°ñ°í°´ ¸®½ºÆ®.txt";
             }
             
             writer = new FileWriter(fileName, true);
-            String reservStr = (reservID != null) ? reservID.getReservID() + "" : "ì—†ìŒ";
-            writer.write("ì´ë¦„: " + name + ", ì „í™”ë²ˆí˜¸: " + phoneNum + ", ì˜ˆì•½ë²ˆí˜¸: " + reservID.toString() + ", ì˜ˆì•½ ì¸ì›: " + members + "\n");
+            writer.write("ÀÌ¸§: " + name + ", ÀüÈ­¹øÈ£: " + phoneNum + ", ¿¹¾à¹øÈ£: " + reservID.toString() + ", ¿¹¾à ÀÎ¿ø: " + members + "\n");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -51,37 +50,37 @@ public class Customer {
         }
     }
     
-	// ê³ ê° ì •ë³´ ì…ë ¥
+	// °í°´ Á¤º¸ ÀÔ·Â
     public void inputInfo() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("ì´ë¦„: ");
+        System.out.print("ÀÌ¸§: ");
         name = sc.nextLine();
-        System.out.println("ì „í™”ë²ˆí˜¸ (ex. 010-1234-5678): ");
+        System.out.print("ÀüÈ­¹øÈ£ (ex. 010-1234-5678): ");
         while(true) {
         	phoneNum = sc.nextLine();
-        	if (phoneNum.matches("\\d{3}-\\d{4}-\\d{4}")) break; //ì „í™”ë²ˆí˜¸ í˜•ì‹ì´ ì˜¬ë°”ë¥¸ì§€ í™•ì¸
+        	if (phoneNum.matches("\\d{3}-\\d{4}-\\d{4}")) break; //ÀüÈ­¹øÈ£ Çü½ÄÀÌ ¿Ã¹Ù¸¥Áö È®ÀÎ
         	else {
-        		System.out.println("ì „í™”ë²ˆí˜¸ í˜•ì‹ì´ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.\në‹¤ì‹œ ì…ë ¥í•´ ì£¼ì‹­ì‹œì˜¤");
+        		System.out.print("ÀüÈ­¹øÈ£ Çü½ÄÀÌ Àß¸øµÇ¾ú½À´Ï´Ù.\n´Ù½Ã ÀÔ·ÂÇØ ÁÖ½Ê½Ã¿À: ");
         	}
         }
         
-        System.out.println("ì˜ˆì•½ ì¸ì›: ");
+        System.out.print("¿¹¾à ÀÎ¿ø: ");
         try {
         	members = Integer.parseInt(sc.nextLine());
-        	if (members <= 0) throw new NumberFormatException(); //ì¸ì› ìˆ«ìê°€ ì–‘ìˆ˜ì„ì„ í™•ì¸
+        	if (members <= 0) throw new NumberFormatException(); //ÀÎ¿ø ¼ıÀÚ°¡ ¾ç¼öÀÓÀ» È®ÀÎ
 		} catch (Exception e) {
-			System.out.println("ìœ íš¨í•˜ì§€ ì•Šì€ ì¸ì›ì…ë‹ˆë‹¤. 1ëª…ìœ¼ë¡œ ì„¤ì •ë©ë‹ˆë‹¤.");
+			System.out.println("À¯È¿ÇÏÁö ¾ÊÀº ÀÎ¿øÀÔ´Ï´Ù. 1¸íÀ¸·Î ¼³Á¤µË´Ï´Ù.");
 			members = 1;
 		}
         
     }
     
-	// ê³ ê° ì •ë³´ ì¶œë ¥
+	// °í°´ Á¤º¸ Ãâ·Â
     public void printInfo() {
-        System.out.println("ì´ë¦„: " + name);
-        System.out.println("ì „í™”ë²ˆí˜¸: " + phoneNum);
-        System.out.println("ì˜ˆì•½ë²ˆí˜¸: " + reservID);
-        System.out.println("ì˜ˆì•½ ì¸ì›: " + members);
+        System.out.println("ÀÌ¸§: " + name);
+        System.out.println("ÀüÈ­¹øÈ£: " + phoneNum);
+        System.out.println("¿¹¾à¹øÈ£: " + reservID);
+        System.out.println("¿¹¾à ÀÎ¿ø: " + members);
     }
 
     public String getName() {
