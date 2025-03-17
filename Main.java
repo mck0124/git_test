@@ -13,94 +13,96 @@ public class Main {
         List<Reservation> reservations = new ArrayList<>();
         ReservationSystem system = new ReservationSystem(reservations, rooms);
         
-        //ÃÊ±â ¹æ µ¥ÀÌÅÍ Ãß°¡ (Å×½ºÆ®¿ë)
+        //ì´ˆê¸° ë°© ë°ì´í„° ì¶”ê°€ (í…ŒìŠ¤íŠ¸ìš©)
        rooms.add(new Room(101, "Single", 2, 50000, false));
        rooms.add(new Room(102, "Single", 2, 50000, false));
        rooms.add(new Room(201, "Double", 4, 80000, false));
        rooms.add(new Room(202, "Double", 4, 80000, false));
        
        
-       //³¯Â¥ Çü½Ä ÁöÁ¤ ex) 2025-03-20 14:00
+       //ë‚ ì§œ í˜•ì‹ ì§€ì • ex) 2025-03-20 14:00
        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         
         while (true) {
-        	System.out.println("===== ¸Ş´º =====");
-            System.out.println("1. °í°´ Á¤º¸ ÀÔ·Â");
-            System.out.println("2. ¹æ ¿¹¾à");
-            System.out.println("3. ¿¹¾à Á¤º¸ Ãâ·Â");
-            System.out.println("4. Ã¼Å©ÀÎ");
-            System.out.println("5. Ã¼Å©¾Æ¿ô");
-            System.out.println("6. ÀüÃ¼ ¿¹¾à ÆÄÀÏ »ı¼º");
-            System.out.println("7. Á¾·á");
-            System.out.print("¸Ş´º¸¦ ¼±ÅÃÇÏ¼¼¿ä: ");
+        	System.out.println("===== ë©”ë‰´ =====");
+            System.out.println("1. ê³ ê° ì •ë³´ ì…ë ¥");
+            System.out.println("2. ë°© ì˜ˆì•½");
+            System.out.println("3. ì˜ˆì•½ ì •ë³´ ì¶œë ¥");
+            System.out.println("4. ì²´í¬ì¸");
+            System.out.println("5. ì²´í¬ì•„ì›ƒ");
+            System.out.println("6. ì „ì²´ ì˜ˆì•½ íŒŒì¼ ìƒì„±");
+            System.out.println("7. ì¢…ë£Œ");
+            System.out.print("ë©”ë‰´ë¥¼ ì„ íƒí•˜ì„¸ìš”: ");
             String menu = sc.nextLine();
             System.out.println();
 
             switch (menu) {
-                case "1": //°í°´ Á¤º¸ ÀÔ·Â 
-                	System.out.println("===== °í°´ Á¤º¸ ÀÔ·Â =====");
-                	Customer customer = new Customer(); // °í°´ °´Ã¼ »ı¼º
+                case "1": //ê³ ê° ì •ë³´ ì…ë ¥ 
+                	System.out.println("===== ê³ ê° ì •ë³´ ì…ë ¥ =====");
+                	Customer customer = new Customer(); // ê³ ê° ê°ì²´ ìƒì„±
                 	customer.inputInfo();
                 	customers.add(customer);
                 	System.out.println();
                     break;
                     
-                case "2": //¹æ ¿¹¾à 
-                	//°í°´ ÀüÈ­¹øÈ£ ÀÔ·Â (+Á¸Àç ¿©ºÎ È®ÀÎ)
-                	System.out.println("===== ¹æ ¿¹¾à =====");
-                    System.out.print("¿¹¾àÇÒ °í°´ ÀüÈ­¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä: ");
+                case "2": //ë°© ì˜ˆì•½ 
+                	//ê³ ê° ì „í™”ë²ˆí˜¸ ì…ë ¥ (+ì¡´ì¬ ì—¬ë¶€ í™•ì¸)
+                	System.out.println("===== ë°© ì˜ˆì•½ =====");
+                    System.out.print("ì˜ˆì•½í•  ê³ ê° ì „í™”ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”: ");
                     String phoneNum = sc.nextLine();
                     System.out.println();
                     Customer foundCustomer = customers.stream()
                     		.filter(c -> c.getPhoneNum().equals(phoneNum))
                     		.findFirst().orElse(null);
                     if (foundCustomer == null) {
-                    	System.out.println("°í°´À» Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+                    	System.out.println("ê³ ê°ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
                     	System.out.println();
                     	break;
                     }
                     
-                    //¿¹¾à ³¯Â¥ ÀÔ·Â
-                    System.out.println("----- ¿¹¾à ³¯Â¥ ÀÔ·Â -----");
-                    System.out.println("Ã¼Å©ÀÎ ³¯Â¥¸¦ ÀÔ·ÂÇÏ¼¼¿ä (ex. 2025-03-20 14:00): ");
-                    String startDateStr = sc.nextLine();
-                    System.out.println();
-                    System.out.println("Ã¼Å©¾Æ¿ô ³¯Â¥¸¦ ÀÔ·ÂÇÏ¼¼¿ä (ex. 2025-03-20 14:00): ");
-                    String endDateStr = sc.nextLine();
-                    System.out.println();
-                    LocalDateTime startDate, endDate;
-                    try {
-                	    startDate = LocalDateTime.parse(startDateStr, formatter);
-                	    endDate = LocalDateTime.parse(endDateStr, formatter);
-                	    
-                	    // À¯È¿ÇÑ ¿¹¾à ³¯Â¥ÀÎÁö È®ÀÎ ÀıÂ÷ (¿ÀÀÔ·Â ¹æÁö)
-                	    if (startDate.isAfter(endDate)||startDate.isBefore(LocalDateTime.now())) {
-                	 	   System.out.println("À¯È¿ÇÏÁö ¾ÊÀº ³¯Â¥ÀÔ´Ï´Ù. (Ã¼Å©ÀÎ, Ã¼Å©¾Æ¿ô ³¯Â¥¸¦ ´Ù½Ã È®ÀÎ ÇØÁÖ½Ê½Ã¿À)");
-                	  	   System.out.println();
-                	 	   break;
-                	    }
-                    } catch (Exception e) {
-                    	System.out.println("³¯Â¥ Çü½ÄÀÌ Àß¸øµÇ¾ú½À´Ï´Ù. (ex. 2025-03-20 14:00)");
-                    	System.out.println();
-                    	break;
+                    //ì˜ˆì•½ ë‚ ì§œ ì…ë ¥
+                    System.out.println("----- ì˜ˆì•½ ë‚ ì§œ ì…ë ¥ -----");
+                    LocalDateTime startDate = null, endDate = null;
+                    boolean validDate = false;
+                    while (!validDate) {
+                        System.out.println("ì²´í¬ì¸ ë‚ ì§œë¥¼ ì…ë ¥í•˜ì„¸ìš” (ex. 2025-03-20 14:00): ");
+                        String startDateStr = sc.nextLine();
+                        System.out.println();
+                        System.out.println("ì²´í¬ì•„ì›ƒ ë‚ ì§œë¥¼ ì…ë ¥í•˜ì„¸ìš” (ex. 2025-03-20 14:00): ");
+                        String endDateStr = sc.nextLine();
+                        System.out.println();
+                        try {
+                    	    startDate = LocalDateTime.parse(startDateStr, formatter);
+                    	    endDate = LocalDateTime.parse(endDateStr, formatter);
+                    	    
+                    	    // ìœ íš¨í•œ ì˜ˆì•½ ë‚ ì§œì¸ì§€ í™•ì¸ ì ˆì°¨ (ì˜¤ì…ë ¥ ë°©ì§€)
+                    	    if (startDate.isAfter(endDate)) {
+                    	    	System.out.println("ì²´í¬ì¸ ë‚ ì§œëŠ” ì²´í¬ì•„ì›ƒ ë‚ ì§œë³´ë‹¤ ì´ì „ì´ì–´ì•¼ í•©ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ ì£¼ì„¸ìš”.");
+                    	    } else if (startDate.isBefore(LocalDateTime.now())) {
+                    	    	System.out.println("ì²´í¬ì¸ ë‚ ì§œëŠ” í˜„ì¬ë³´ë‹¤ ë¯¸ë˜ì—¬ì•¼ í•©ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+                    	    } else validDate = true;
+                        } catch (Exception e) {
+                        	System.out.println("ë‚ ì§œ í˜•ì‹ì´ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤. (ex. 2025-03-20 14:00)");
+                        	System.out.println();
+                        }
                     }
                     
-                    //ÇØ´ç ³¯Â¥¿¡ ¿¹¾à °¡´ÉÇÑ ¹æ ¸ñ·Ï (ÇÊÅÍ¸µ)
+                    //í•´ë‹¹ ë‚ ì§œì— ì˜ˆì•½ ê°€ëŠ¥í•œ ë°© ëª©ë¡ (í•„í„°ë§)
                     Map<String, Long> availableRooms = system.getAvailableRoomCounts(startDate, endDate);
                     if (availableRooms.isEmpty()) {
-                 	    System.out.println(startDate.toLocalDate() + "¿¡ ¿¹¾à °¡´ÉÇÑ ¹æÀÌ ¾ø½À´Ï´Ù.");
+                 	    System.out.println(startDate.toLocalDate() + "ì— ì˜ˆì•½ ê°€ëŠ¥í•œ ë°©ì´ ì—†ìŠµë‹ˆë‹¤.");
                  	    System.out.println();
                  	    break;
                     }
                    
-                    //¹æ Å¸ÀÔº°·Î ±×·ìÈ­ ÇØ¼­ Ãâ·ÂÇÏ±â
-                    System.out.println("----- " + startDate.toLocalDate() + "¿¡ ¿¹¾à °¡´ÉÇÑ ¹æ -----");
+                    //ë°© íƒ€ì…ë³„ë¡œ ê·¸ë£¹í™” í•´ì„œ ì¶œë ¥í•˜ê¸°
+                    System.out.println("----- " + startDate.toLocalDate() + "ì— ì˜ˆì•½ ê°€ëŠ¥í•œ ë°© -----");
                     availableRooms.forEach((type, count) -> 
-                    	System.out.println(type + "·ë: " + count + "°³ ³²À½"));
+                    	System.out.println(type + "ë£¸: " + count + "ê°œ ë‚¨ìŒ"));
                     System.out.println();
 
-                    //¹æ Å¸ÀÔ ¼±ÅÃ
-                    System.out.print("¿¹¾àÇÒ ¹æ Å¸ÀÔÀ» ÀÔ·ÂÇÏ¼¼¿ä (single/double): ");
+                    //ë°© íƒ€ì… ì„ íƒ
+                    System.out.print("ì˜ˆì•½í•  ë°© íƒ€ì…ì„ ì…ë ¥í•˜ì„¸ìš” (single/double): ");
                     String roomType = sc.nextLine();
                     System.out.println();
                     Room selectedRoom = system.getAvailableRooms(startDate, endDate).stream()
@@ -108,64 +110,64 @@ public class Main {
                 	 	   .findFirst().orElse(null);
                    
                     if (selectedRoom == null) {
-                	    System.out.println("¼±ÅÃÇÏ½Å ¹æÀº ¿¹¾àÇÏ½Ç ¼ö ¾ø½À´Ï´Ù.");
+                	    System.out.println("ì„ íƒí•˜ì‹  ë°©ì€ ì˜ˆì•½í•˜ì‹¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
                 	    System.out.println();
                 	    break;
                     }
                    
-                    //¿¹¾à »ı¼º
+                    //ì˜ˆì•½ ìƒì„±
                     Reservation reservation = system.addReservation(foundCustomer, selectedRoom, foundCustomer, startDate, endDate);
                     foundCustomer.setReservID(reservation);
-                    System.out.println("----- ¿¹¾à ¿Ï·á -----");
-                    System.out.println("¿¹¾àÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.\n¿¹¾à ID: " + reservation.getReservID());
+                    System.out.println("----- ì˜ˆì•½ ì™„ë£Œ -----");
+                    System.out.println("ì˜ˆì•½ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\nì˜ˆì•½ ID: " + reservation.getReservID());
                     System.out.println();
                     break;
                     
-                case "3": //¿¹¾à Á¤º¸ Ãâ·Â 
-                	System.out.println("===== ¿¹¾à Á¤º¸ Ãâ·Â =====");
+                case "3": //ì˜ˆì•½ ì •ë³´ ì¶œë ¥ 
+                	System.out.println("===== ì˜ˆì•½ ì •ë³´ ì¶œë ¥ =====");
                 	reservations.forEach(Reservation::printReserv);
                 	System.out.println();
                     break;
                     
-                case "4": //Ã¼Å©ÀÎ 
-                	System.out.println("===== Ã¼Å©ÀÎ =====");
-                	System.out.print("Ã¼Å©ÀÎÇÒ ¿¹¾à ID¸¦ ÀÔ·ÂÇÏ¼¼¿ä: ");
+                case "4": //ì²´í¬ì¸ 
+                	System.out.println("===== ì²´í¬ì¸ =====");
+                	System.out.print("ì²´í¬ì¸í•  ì˜ˆì•½ IDë¥¼ ì…ë ¥í•˜ì„¸ìš”: ");
                 	try {
 						int checkInId = Integer.parseInt(sc.nextLine());
 						system.checkIn(checkInId);
 					} catch (NumberFormatException e) {
-						System.out.println("À¯È¿ÇÑ ¿¹¾à ID(¼ıÀÚ)¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+						System.out.println("ìœ íš¨í•œ ì˜ˆì•½ ID(ìˆ«ì)ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
 					}
                 	System.out.println();
                     break;
                     
-                case "5": //Ã¼Å©¾Æ¿ô 
-                	System.out.println("===== Ã¼Å©¾Æ¿ô =====");
-                    System.out.print("Ã¼Å©¾Æ¿ôÇÒ ¿¹¾à ID¸¦ ÀÔ·ÂÇÏ¼¼¿ä: ");
+                case "5": //ì²´í¬ì•„ì›ƒ 
+                	System.out.println("===== ì²´í¬ì•„ì›ƒ =====");
+                    System.out.print("ì²´í¬ì•„ì›ƒí•  ì˜ˆì•½ IDë¥¼ ì…ë ¥í•˜ì„¸ìš”: ");
                     try {
 						int checkOutId = Integer.parseInt(sc.nextLine());
 						system.checkOut(checkOutId);
 					} catch (NumberFormatException e) {
-						System.out.println("À¯È¿ÇÑ ¿¹¾à ID(¼ıÀÚ)¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+						System.out.println("ìœ íš¨í•œ ì˜ˆì•½ ID(ìˆ«ì)ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
 					}
                     System.out.println();
                     break;
                     
-                case "6": //°í°´ Á¤º¸ µî·Ï 
-                	System.out.println("===== ÀüÃ¼ ¿¹¾à ÆÄÀÏ »ı¼º =====");
+                case "6": //ê³ ê° ì •ë³´ ë“±ë¡ 
+                	System.out.println("===== ì „ì²´ ì˜ˆì•½ íŒŒì¼ ìƒì„± =====");
                     for (Customer c : customers) {
                     	system.saveInfo(c, c.getReservID().getReservID(), c.getMembers());
                     }
-                    System.out.println("°í°´ ¿¹¾à³»¿ª ¸®½ºÆ®.txt ÆÄÀÏ¿¡ µî·ÏµÇ¾ú½À´Ï´Ù.");
+                    System.out.println("ê³ ê° ì˜ˆì•½ë‚´ì—­ ë¦¬ìŠ¤íŠ¸.txt íŒŒì¼ì— ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.");
                     System.out.println();
                     break;
                     
-                case "7": //Á¾·á 
-                    System.out.println("ÇÁ·Î±×·¥À» Á¾·áÇÕ´Ï´Ù.");
+                case "7": //ì¢…ë£Œ 
+                    System.out.println("í”„ë¡œê·¸ë¨ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.");
                     return;
                     
                 default:
-                    System.out.println("Àß¸øµÈ ¼±ÅÃÀÔ´Ï´Ù. ´Ù½Ã ½ÃµµÇÏ¼¼¿ä.");
+                    System.out.println("ì˜ëª»ëœ ì„ íƒì…ë‹ˆë‹¤. ë‹¤ì‹œ ì‹œë„í•˜ì„¸ìš”.");
                     System.out.println();
             }
         }
