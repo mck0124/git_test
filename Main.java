@@ -64,8 +64,8 @@ public class Main {
                     
                 case "6": //고객 정보 등록 
                     System.out.println("===== 전체 예약 파일 생성 =====");
-                    for (Customer c : customers) {
-                        system.saveInfo(c, c.getReservID().getReservID(), c.getMembers());
+                    for (Reservation r : reservations) {
+                        system.saveInfo(r.getCustomer(), r.getReservID(), r.getRoom(), r.getStartDate(), r.getEndDate());
                     }
                     System.out.println("고객 예약내역 리스트.txt 파일에 등록되었습니다.");
                     System.out.println();

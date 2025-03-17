@@ -1,4 +1,5 @@
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.System;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.stream.Collectors;
 public class ReservationSystem {
     private List<Reservation> reservations;
     private List<Room> rooms;
-    FileWriter writer = null;
+    OutputStreamWriter writer = null;
 
     public ReservationSystem(List<Reservation> reservations, List<Room> rooms) {
         this.reservations = reservations;
@@ -42,25 +43,29 @@ public class ReservationSystem {
     }
 
     // 고객 정보 저장
-    public void saveInfo(Customer customer, int reservID, int members) {
-        try {
-            String fileName;
-
-            fileName = "고객 예약내역 리스트.txt";
-            writer = new FileWriter(fileName, true);
-            writer.write("이름: " + customer.getName() + ", 전화번호: " + customer.getPhoneNum() + ", 예약번호: " + reservID + ", 예약 인원: "
-                    + members + "\n");
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (Exception e2) {
-            }
-        }
-    }
+    public void saveInfo(Customer customer, int reservID, Room room, LocalDateTime startDate, LocalDateTime endDate) { 
+    try { 
+        String fileName = "고객 예약내역 리스트.txt"; 
+        writer = new OutputStreamWriter(new FileOutputStream(fileName, true), "EUC-KR"); 
+        writer.write("이름: " + customer.getName() + 
+                     ", 전화번호: " + customer.getPhoneNum() + 
+                     ", 예약번호: " + reservID + 
+                     ", 방 번호: " + room.getRoomID() + 
+                     ", 방 타입: " + room.getType() + 
+                     ", 체크인 날짜: " + startDate.toString() + 
+                     ", 체크아웃 날짜: " + endDate.toString() + "\n"); 
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally { 
+        try { 
+            if (writer != null) { 
+                writer.close(); 
+            } 
+        } catch (Exception e2) {
+            e2.printStackTrace(); 
+        } 
+    } 
+}
 
     public void checkIn(Scanner sc) {
         System.out.println("===== 체크인 =====");
@@ -87,32 +92,40 @@ public class ReservationSystem {
         System.out.println();
     }
 
-    public void checkOut(int reservID) {
+    public void checkOut(Scanner sc) {
         System.out.println("===== 체크아웃 =====");
         System.out.print("체크아웃할 예약 ID를 입력하세요: ");
-        for (Reservation reservation : reservations) {
-            if (reservation.getReservID() == reservID) {
-                System.out.println("예약번호 " + reservation.getReservID() + "로 체크아웃 완료.");
-                System.out.println("다음 이용부터 " + getnextGrade(reservation.getVisitCount()+1) + " 등급입니다.");
-                System.out.print("추가 결제가 필요하십니까? (네/아니오) : ");
-                Scanner sc = new Scanner(System.in);
-                String response = sc.nextLine();
+        try {
+            int reservID = Integer.parseInt(sc.nextLine());
+            for (Reservation reservation : reservations) {
+                if (reservation.getReservID() == reservID) {
+                    System.out.println("예약번호 " + reservation.getReservID() + "로 체크아웃 완료.");
+                    System.out.println("다음 이용부터 " + getnextGrade(reservation.getVisitCount() + 1) + " 등급입니다.");
+                    System.out.print("추가 결제가 필요하십니까? (네/아니오) : ");
+                    String response = sc.nextLine();
 
-                if (response.equalsIgnoreCase("네")) {
-                    System.out.print("추가 결제 금액을 입력하세요: ");
-                    int additionalPayment = sc.nextInt();
-                    additionalPayment(additionalPayment);
-                }else System.out.println("방문해주셔서 감사합니다. ");
-
-                for (Room room : rooms) {
-                    if (room.getRoomID() == reservation.getRoom().getRoomID()) {
-                        room.setFull(false);
-                        break;
+                    if (response.equalsIgnoreCase("네")) {
+                        System.out.print("추가 결제 금액을 입력하세요: ");
+                        int additionalPayment = Integer.parseInt(sc.nextLine());
+                        additionalPayment(additionalPayment);
+                    } else {
+                        System.out.println("방문해주셔서 감사합니다.");
                     }
+
+                    for (Room room : rooms) {
+                        if (room.getRoomID() == reservation.getRoom().getRoomID()) {
+                            room.setFull(false);
+                            break;
+                        }
+                    }
+                    return;
                 }
-                break;
             }
+            System.out.println("유효한 예약 ID(숫자)를 입력하세요.");
+        } catch (NumberFormatException e) {
+            System.out.println("유효한 예약 ID(숫자)를 입력하세요.");
         }
+        System.out.println();
     }
 
     private void additionalPayment(int amount) {

@@ -117,7 +117,7 @@ public class Reservation {
         System.out.println("예약이 완료되었습니다.\n예약 ID: " + reservation.getReservID());
         System.out.println();
     }
-
+    
     public void printReserv(Scanner sc, List<Reservation> reservations) {
         System.out.println("===== 예약 정보 출력 =====");
         System.out.print("예약 ID를 입력하세요: ");
