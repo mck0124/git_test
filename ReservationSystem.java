@@ -74,11 +74,16 @@ public class ReservationSystem {
             int reservID = Integer.parseInt(sc.nextLine());
             for (Reservation reservation : reservations) {
                 if (reservation.getReservID() == reservID) {
+                    if (reservation.isCheckedIn()) {
+                        System.out.println("이미 체크인된 예약입니다.");
+                        return;
+                    }
                     System.out.println("예약번호 " + reservation.getReservID() + "로 체크인 완료.");
                     for (Room room : rooms) {
                         if (room.getRoomID() == reservation.getRoom().getRoomID()) {
                             System.out.println("방 번호는 " + room.getRoomID() + "입니다. 즐거운 시간 되세요!");
                             room.setFull(true);
+                            reservation.setCheckedIn(true);
                             break;
                         }
                     }
@@ -99,6 +104,10 @@ public class ReservationSystem {
             int reservID = Integer.parseInt(sc.nextLine());
             for (Reservation reservation : reservations) {
                 if (reservation.getReservID() == reservID) {
+                    if (reservation.isCheckedOut()) {
+                        System.out.println("이미 체크아웃된 예약입니다.");
+                        return;
+                    }
                     System.out.println("예약번호 " + reservation.getReservID() + "로 체크아웃 완료.");
                     System.out.println("다음 이용부터 " + getnextGrade(reservation.getVisitCount() + 1) + " 등급입니다.");
                     System.out.print("추가 결제가 필요하십니까? (네/아니오) : ");
@@ -115,6 +124,7 @@ public class ReservationSystem {
                     for (Room room : rooms) {
                         if (room.getRoomID() == reservation.getRoom().getRoomID()) {
                             room.setFull(false);
+                            reservation.setCheckedOut(true);
                             break;
                         }
                     }

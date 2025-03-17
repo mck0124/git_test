@@ -16,6 +16,8 @@ public class Reservation {
     private Customer members;
     private int visitCount;
     private static int nextReservID = 1;
+    private boolean isCheckedIn;
+    private boolean isCheckedOut;
 
     public Reservation() {
     }
@@ -208,5 +210,21 @@ public class Reservation {
 
     public void setVisitCount(int visitCount) {
         this.visitCount = visitCount;
+    }
+
+    public boolean isCheckedIn() {
+        return isCheckedIn;
+    }
+
+    public void setCheckedIn(boolean checkedIn) {
+        isCheckedIn = checkedIn;
+    }
+
+    public boolean isCheckedOut() {
+        return isCheckedOut;
+    }
+
+    public void setCheckedOut(boolean checkedOut) {
+        isCheckedOut = checkedOut;
     }
 }
