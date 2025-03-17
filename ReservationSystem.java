@@ -1,6 +1,7 @@
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.System;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class ReservationSystem {
     }
 
     // 예약 list[]에 추가
-    public Reservation addReservation(Customer customer, Room room, Customer members, LocalDateTime startDate, LocalDateTime endDate) {
+    public Reservation addReservation(Customer customer, Room room, int members, LocalDate startDate, LocalDate endDate) {
         Reservation reservation = new Reservation(customer, room, members, startDate, endDate);
         reservations.add(reservation);
         return reservation;
@@ -42,7 +43,7 @@ public class ReservationSystem {
     }
 
     // 예약가능한 방 수 출력
-    public Map<String, Long> getAvailableRoomCounts(LocalDateTime startDate, LocalDateTime endDate) {
+    public Map<String, Long> getAvailableRoomCounts(LocalDate startDate, LocalDate endDate) {
         return rooms.stream()
                 .filter(room -> reservations.stream()
                         .noneMatch(reservation -> reservation.getRoom().equals(room) &&
@@ -51,7 +52,7 @@ public class ReservationSystem {
     }
 
     // 예약가능한 방 출력
-    public List<Room> getAvailableRooms(LocalDateTime startDate, LocalDateTime endDate) {
+    public List<Room> getAvailableRooms(LocalDate startDate, LocalDate endDate) {
         return rooms.stream()
                 .filter(room -> reservations.stream()
                         .noneMatch(reservation -> reservation.getRoom().equals(room) &&
