@@ -1,4 +1,6 @@
 import java.lang.System;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Room {
     // field
@@ -21,23 +23,30 @@ public class Room {
         this.isFull = isFull;
     }
     
+    public static List<Room> generateInitialRooms() {
+        List<Room> rooms = new ArrayList<>();
+        rooms.add(new Room(101, "Single", 2, 50000, false));
+        rooms.add(new Room(102, "Single", 2, 50000, false));
+        rooms.add(new Room(103, "Single", 2, 50000, false));
+        rooms.add(new Room(201, "Double", 4, 80000, false));
+        rooms.add(new Room(202, "Double", 4, 80000, false));
+        rooms.add(new Room(203, "Double", 4, 80000, false));
+        rooms.add(new Room(401, "Deluxe", 8, 200000, false));
+        rooms.add(new Room(402, "Deluxe", 8, 200000, false));
+        rooms.add(new Room(403, "Deluxe", 8, 200000, false));
+        return rooms;
+    }
+    
 	// 방 정보 출력
     public void printRoomInfo() {
+    	System.out.println("----- 방 정보 -----");
         System.out.println("방번호: " + roomID);
         System.out.println("타입: " + type);
         System.out.println("방 정원: " + fullMember);
         System.out.println("가격: " + price);
         System.out.println("예약가능여부: " + (isFull ? "불가" : "가능"));
+        System.out.println();
     }
-    
-	// 방 예약 가능 여부 확인
-//    public boolean roomAvailable(String startDate, String endDate, String roomType, boolean isFull) { 
-//        if (this.type.equals(roomType) && !this.isFull) {
-//			printRoomInfo();
-//            return true;
-//        }
-//        return false;
-//    }
     
     public boolean isAvailable() {
     	return !isFull;
