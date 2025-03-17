@@ -24,6 +24,23 @@ public class ReservationSystem {
         return reservation;
     }
 
+    public void deleteReservation(Scanner sc) {
+        System.out.println("===== 예약 삭제 =====");
+        System.out.print("삭제할 예약 ID를 입력하세요: ");
+        int reservID = Integer.parseInt(sc.nextLine());
+        Reservation foundReservation = reservations.stream()
+            .filter(r -> r.getReservID() == reservID)
+            .findFirst().orElse(null);
+        if (foundReservation != null) {
+            reservations.remove(foundReservation);
+            foundReservation.getRoom().setFull(false); // 방을 비어있음으로 표시
+            System.out.println("예약이 삭제되었습니다.");
+        } else {
+            System.out.println("해당 예약 ID를 찾을 수 없습니다.");
+        }
+        System.out.println();
+    }
+
     // 예약가능한 방 수 출력
     public Map<String, Long> getAvailableRoomCounts(LocalDateTime startDate, LocalDateTime endDate) {
         return rooms.stream()

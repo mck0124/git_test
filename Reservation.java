@@ -147,13 +147,6 @@ public class Reservation {
         System.out.println();
     }
 
-    public void deleteReserv() {
-        this.customer = null;
-        this.room = null;
-        this.startDate = null;
-        this.endDate = null;
-    }
-
     // Getters and Setters
     public Customer getCustomer() {
         return customer;

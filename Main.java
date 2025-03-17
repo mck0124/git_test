@@ -29,7 +29,8 @@ public class Main {
             System.out.println("4. 체크인");
             System.out.println("5. 체크아웃");
             System.out.println("6. 전체 예약 파일 생성");
-            System.out.println("7. 종료");
+            System.out.println("7. 예약 삭제");
+            System.out.println("8. 종료");
             System.out.print("메뉴를 선택하세요: ");
             String menu = sc.nextLine();
             System.out.println();
@@ -68,8 +69,12 @@ public class Main {
                     System.out.println("고객 예약내역 리스트.txt 파일에 등록되었습니다.");
                     System.out.println();
                     break;
+
+                case "7": //예약 삭제
+                    system.deleteReservation(sc);
+                    break;
                     
-                case "7": //종료 
+                case "8": //종료 
                     System.out.println("프로그램을 종료합니다.");
                     return;
                     
