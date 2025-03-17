@@ -40,16 +40,20 @@ public class Reservation {
         this.reservID = nextReservID++; // 예약 ID 자동 생성
     }
 
-    public void printReserv() {
-    	System.out.println("----- 예약 내역 -----");
-        System.out.println("예약 내역 출력:");
-        System.out.println("고객 이름: " + customer.getName());
-        System.out.println("예약 ID: " + reservID);
-        System.out.println("방번호: " + room.getRoomID());
-        System.out.println("체크인 날짜: " + startDate);
-        System.out.println("체크아웃 날짜: " + endDate);
-        long days = java.time.Duration.between(startDate, endDate).toDays();
-        System.out.println("가격: " + room.getPrice()*days + "원");
+    public void printReserv(int reservID) {
+        if (this.reservID == reservID) {
+            System.out.println("----- 예약 내역 -----");
+            System.out.println("예약 내역 출력:");
+            System.out.println("고객 이름: " + customer.getName());
+            System.out.println("예약 ID: " + this.reservID);
+            System.out.println("방번호: " + room.getRoomID());
+            System.out.println("체크인 날짜: " + startDate);
+            System.out.println("체크아웃 날짜: " + endDate);
+            long days = java.time.Duration.between(startDate, endDate).toDays();
+            System.out.println("가격: " + room.getPrice() * days + "원");
+        } else {
+            System.out.println("해당 예약 ID를 찾을 수 없습니다.");
+        }
     }
 
     public void deleteReserv() {

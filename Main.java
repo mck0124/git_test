@@ -122,9 +122,18 @@ public class Main {
                     break;
                     
                 case "3": //예약 정보 출력 
-                	System.out.println("===== 예약 정보 출력 =====");
-                	reservations.forEach(Reservation::printReserv);
-                	System.out.println();
+                    System.out.println("===== 예약 정보 출력 =====");
+                    System.out.print("예약 ID를 입력하세요: ");
+                    int reservID = Integer.parseInt(sc.nextLine());
+                    Reservation foundReservation = reservations.stream()
+                        .filter(r -> r.getReservID() == reservID)
+                        .findFirst().orElse(null);
+                    if (foundReservation != null) {
+                        foundReservation.printReserv(reservID);
+                    } else {
+                        System.out.println("예약을 찾을 수 없습니다.");
+                    }
+                    System.out.println();
                     break;
                     
                 case "4": //체크인 
