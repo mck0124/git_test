@@ -99,7 +99,7 @@ public class Reservation {
         System.out.println();
 
         // 방 타입 선택
-        System.out.print("예약할 방 타입을 입력하세요 (single/double): ");
+        System.out.print("예약할 방 타입을 입력하세요 (single/deluxe/double): ");
         String roomType = sc.nextLine();
         System.out.println();
         Room selectedRoom = system.getAvailableRooms(startDate, endDate).stream()

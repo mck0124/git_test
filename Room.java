@@ -1,4 +1,6 @@
 import java.lang.System;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Room {
     // field
@@ -19,6 +21,20 @@ public class Room {
         this.fullMember = fullMember;
         this.price = price;
         this.isFull = isFull;
+    }
+    
+    public static List<Room> generateInitialRooms() {
+        List<Room> rooms = new ArrayList<>();
+        rooms.add(new Room(101, "Single", 2, 50000, false));
+        rooms.add(new Room(102, "Single", 2, 50000, false));
+        rooms.add(new Room(103, "Single", 2, 50000, false));
+        rooms.add(new Room(201, "Double", 4, 80000, false));
+        rooms.add(new Room(202, "Double", 4, 80000, false));
+        rooms.add(new Room(203, "Double", 4, 80000, false));
+        rooms.add(new Room(401, "Deluxe", 8, 200000, false));
+        rooms.add(new Room(402, "Deluxe", 8, 200000, false));
+        rooms.add(new Room(403, "Deluxe", 8, 200000, false));
+        return rooms;
     }
     
 	// 방 정보 출력

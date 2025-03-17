@@ -7,19 +7,12 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         List<Customer> customers = new ArrayList<>();
-        List<Room> rooms = new ArrayList<>();
+        List<Room> rooms = Room.generateInitialRooms();
         List<Reservation> reservations = new ArrayList<>();
         ReservationSystem system = new ReservationSystem(reservations, rooms);
         
-        //초기 방 데이터 추가 (테스트용)
-       rooms.add(new Room(101, "Single", 2, 50000, false));
-       rooms.add(new Room(102, "Single", 2, 50000, false));
-       rooms.add(new Room(201, "Double", 4, 80000, false));
-       rooms.add(new Room(202, "Double", 4, 80000, false));
-       
-       
-       //날짜 형식 지정 ex) 2025-03-20 14:00
-       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        //날짜 형식 지정 ex) 2025-03-20 14:00
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         
         while (true) {
             System.out.println("===== 메뉴 =====");
