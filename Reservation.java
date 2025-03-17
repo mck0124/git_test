@@ -9,7 +9,7 @@ public class Reservation {
     private Room room;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private Customer members;
+    private int members;
     private int visitCount;
     private static int nextReservID = 1; // 예약 ID 자동 증가를 위한 정적 변수
 
@@ -18,18 +18,19 @@ public class Reservation {
     }
 
     // 생성자
-    public Reservation(Customer customer, Room room, Customer members, LocalDateTime startDate, LocalDateTime endDate) {
+    public Reservation(Customer customer, Room room, int members, LocalDateTime startDate, LocalDateTime endDate) {
         this.customer = customer;
         this.room = room;
         this.members = members;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.room.setFull(true); // 방이 예약되었음을 표시
         this.reservID = nextReservID++; // 예약 ID 자동 생성
     }
 
     // 오퍼레이션
     // 예약추가
-    public void addReservation(Customer customer, Room room, Customer members, LocalDateTime startDate, LocalDateTime endDate) {
+    public void addReservation(Customer customer, Room room, int members, LocalDateTime startDate, LocalDateTime endDate) {
         this.customer = customer;
         this.room = room;
         this.startDate = startDate;
@@ -46,10 +47,19 @@ public class Reservation {
         System.out.println("고객 이름: " + customer.getName());
         System.out.println("예약 ID: " + reservID);
         System.out.println("방번호: " + room.getRoomID());
-        System.out.println("체크인 날짜: " + startDate);
-        System.out.println("체크아웃 날짜: " + endDate);
-        int days = (int)java.time.Duration.between(startDate, endDate).toDays()+1;
-        System.out.println("가격: " + room.getPrice()*days + "원");
+        System.out.println("체크인 날짜: " + startDate.toLocalDate());
+        System.out.println("체크아웃 날짜: " + endDate.toLocalDate());
+        int days = (int)java.time.Duration.between(startDate, endDate).toDays();
+        int basePrice = room.getPrice() * days;
+        int extraCharge = 0;
+        if (members > room.getFullMember()) {
+            extraCharge = (members - room.getFullMember()) * 10000 * days;
+        }
+        System.out.println("기본 가격: " + basePrice + "원");
+        if (extraCharge > 0) {
+            System.out.println("추가 요금: " + extraCharge + "원");
+            System.out.println("총 가격: " + (basePrice + extraCharge) + "원");
+        }
     }
 
     public void deleteReserv() {
@@ -100,11 +110,11 @@ public class Reservation {
         this.endDate = endDate;
     }
 
-    public Customer getMembers() {
+    public int getMembers() {
         return members;
     }
 
-    public Customer setMembers(Customer members) {
+    public int setMembers(int members) {
         this.members = members;
         return this.members;
     }

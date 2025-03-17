@@ -16,7 +16,7 @@ public class ReservationSystem {
         this.rooms = rooms;
     }
 
-    public Reservation addReservation(Customer customer, Room room, Customer members, LocalDateTime startDate, LocalDateTime endDate) {
+    public Reservation addReservation(Customer customer, Room room, int members, LocalDateTime startDate, LocalDateTime endDate) {
         Reservation reservation = new Reservation(customer, room, members, startDate, endDate);
         reservations.add(reservation);
         return reservation;

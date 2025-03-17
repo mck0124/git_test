@@ -1,4 +1,4 @@
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +19,8 @@ public class Main {
        rooms.add(new Room(201, "Double", 4, 80000, false));
        rooms.add(new Room(202, "Double", 4, 80000, false));
        
-       
        //날짜 형식 지정 ex) 2025-03-20 14:00
-       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         
         while (true) {
         	System.out.println("===== 메뉴 =====");
@@ -62,23 +61,23 @@ public class Main {
                     
                     //예약 날짜 입력
                     System.out.println("----- 예약 날짜 입력 -----");
-                    LocalDateTime startDate = null, endDate = null;
+                    LocalDate startDate = null, endDate = null;
                     boolean validDate = false;
                     while (!validDate) {
-                        System.out.println("체크인 날짜를 입력하세요 (ex. 2025-03-20 14:00): ");
+                        System.out.println("체크인 날짜를 입력하세요 (ex. 2025-03-20): ");
                         String startDateStr = sc.nextLine();
                         System.out.println();
-                        System.out.println("체크아웃 날짜를 입력하세요 (ex. 2025-03-20 14:00): ");
+                        System.out.println("체크아웃 날짜를 입력하세요 (ex. 2025-03-20): ");
                         String endDateStr = sc.nextLine();
                         System.out.println();
                         try {
-                    	    startDate = LocalDateTime.parse(startDateStr, formatter);
-                    	    endDate = LocalDateTime.parse(endDateStr, formatter);
+                    	    startDate = LocalDate.parse(startDateStr, formatter);
+                    	    endDate = LocalDate.parse(endDateStr, formatter);
                     	    
                     	    // 유효한 예약 날짜인지 확인 절차 (오입력 방지)
                     	    if (startDate.isAfter(endDate)) {
                     	    	System.out.println("체크인 날짜는 체크아웃 날짜보다 이전이어야 합니다. 다시 입력해 주세요.");
-                    	    } else if (startDate.isBefore(LocalDateTime.now())) {
+                    	    } else if (startDate.isBefore(LocalDate.now())) {
                     	    	System.out.println("체크인 날짜는 현재보다 미래여야 합니다. 다시 입력해주세요.");
                     	    } else validDate = true;
                         } catch (Exception e) {
@@ -88,15 +87,15 @@ public class Main {
                     }
                     
                     //해당 날짜에 예약 가능한 방 목록 (필터링)
-                    Map<String, Long> availableRooms = system.getAvailableRoomCounts(startDate, endDate);
+                    Map<String, Long> availableRooms = system.getAvailableRoomCounts(startDate.atStartOfDay(), endDate.atStartOfDay());
                     if (availableRooms.isEmpty()) {
-                 	    System.out.println(startDate.toLocalDate() + "에 예약 가능한 방이 없습니다.");
+                 	    System.out.println(startDate + "에 예약 가능한 방이 없습니다.");
                  	    System.out.println();
                  	    break;
                     }
-                   
+
                     //방 타입별로 그룹화 해서 출력하기
-                    System.out.println("----- " + startDate.toLocalDate() + "에 예약 가능한 방 -----");
+                    System.out.println("----- " + startDate + "에 예약 가능한 방 -----");
                     availableRooms.forEach((type, count) -> 
                     	System.out.println(type + "룸: " + count + "개 남음"));
                     System.out.println();
@@ -104,8 +103,9 @@ public class Main {
                     //방 타입 선택
                     System.out.print("예약할 방 타입을 입력하세요 (single/double): ");
                     String roomType = sc.nextLine();
+                
                     System.out.println();
-                    Room selectedRoom = system.getAvailableRooms(startDate, endDate).stream()
+                    Room selectedRoom = system.getAvailableRooms(startDate.atStartOfDay(), endDate.atStartOfDay()).stream()
                 	 	   .filter(r -> r.getType().equalsIgnoreCase(roomType))
                 	 	   .findFirst().orElse(null);
                    
@@ -114,9 +114,19 @@ public class Main {
                 	    System.out.println();
                 	    break;
                     }
+
+                    //정원 초과 체크 및 추가요금 계산
+                    int extraCharge = 0;
+                    int days = (int)java.time.Duration.between(startDate.atStartOfDay(), endDate.atStartOfDay()).toDays();
+                    if (foundCustomer.getMembers() > selectedRoom.getFullMember()) {
+                    	int extraPeople = foundCustomer.getMembers() - selectedRoom.getFullMember();
+                        extraCharge = extraPeople * 10000 * days;
+                        System.out.println("정원을 " + extraPeople + "명 초과로 인해 인당 10,000원씩  " + extraCharge + "원의 추가요금이 부과됩니다.");
+                    }
+                    System.out.println();
                    
                     //예약 생성
-                    Reservation reservation = system.addReservation(foundCustomer, selectedRoom, foundCustomer, startDate, endDate);
+                    Reservation reservation = system.addReservation(foundCustomer, selectedRoom, foundCustomer.getMembers(), startDate.atStartOfDay(), endDate.atStartOfDay());
                     foundCustomer.setReservID(reservation);
                     System.out.println("----- 예약 완료 -----");
                     System.out.println("예약이 완료되었습니다.\n예약 ID: " + reservation.getReservID());

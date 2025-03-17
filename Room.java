@@ -32,15 +32,6 @@ public class Room {
         System.out.println();
     }
     
-	// 방 예약 가능 여부 확인
-//    public boolean roomAvailable(String startDate, String endDate, String roomType, boolean isFull) { 
-//        if (this.type.equals(roomType) && !this.isFull) {
-//			printRoomInfo();
-//            return true;
-//        }
-//        return false;
-//    }
-    
     public boolean isAvailable() {
     	return !isFull;
     }
