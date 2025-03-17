@@ -26,6 +26,7 @@ public class Customer {
     // 고객 정보 입력
     public void inputInfo() {
         Scanner sc = new Scanner(System.in);
+        System.out.println("===== 고객 정보 입력 =====");
         System.out.print("이름: ");
         name = sc.nextLine();
         System.out.print("전화번호 (ex. 010-1234-5678): ");

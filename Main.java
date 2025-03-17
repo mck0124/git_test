@@ -38,7 +38,6 @@ public class Main {
 
             switch (menu) {
                 case "1": //고객 정보 입력 
-                    System.out.println("===== 고객 정보 입력 =====");
                     Customer customer = new Customer(); // 고객 객체 생성
                     customer.inputInfo();
                     customers.add(customer);
@@ -50,42 +49,17 @@ public class Main {
                     break;
                     
                 case "3": //예약 정보 출력 
-                    System.out.println("===== 예약 정보 출력 =====");
-                    System.out.print("예약 ID를 입력하세요: ");
-                    int reservID = Integer.parseInt(sc.nextLine());
-                    Reservation foundReservation = reservations.stream()
-                        .filter(r -> r.getReservID() == reservID)
-                        .findFirst().orElse(null);
-                    if (foundReservation != null) {
-                        foundReservation.printReserv(reservID);
-                    } else {
-                        System.out.println("예약을 찾을 수 없습니다.");
-                    }
+                    Reservation reservation = new Reservation();
+                    reservation.printReserv(sc, reservations);
                     System.out.println();
                     break;
                     
                 case "4": //체크인 
-                    System.out.println("===== 체크인 =====");
-                    System.out.print("체크인할 예약 ID를 입력하세요: ");
-                    try {
-                        int checkInId = Integer.parseInt(sc.nextLine());
-                        system.checkIn(checkInId);
-                    } catch (NumberFormatException e) {
-                        System.out.println("유효한 예약 ID(숫자)를 입력하세요.");
-                    }
-                    System.out.println();
+                    system.checkIn(sc);
                     break;
                     
                 case "5": //체크아웃 
-                    System.out.println("===== 체크아웃 =====");
-                    System.out.print("체크아웃할 예약 ID를 입력하세요: ");
-                    try {
-                        int checkOutId = Integer.parseInt(sc.nextLine());
-                        system.checkOut(checkOutId);
-                    } catch (NumberFormatException e) {
-                        System.out.println("유효한 예약 ID(숫자)를 입력하세요.");
-                    }
-                    System.out.println();
+                    system.checkOut(sc);
                     break;
                     
                 case "6": //고객 정보 등록 

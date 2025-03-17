@@ -118,20 +118,31 @@ public class Reservation {
         System.out.println();
     }
 
-    public void printReserv(int reservID) {
-        if (this.reservID == reservID) {
-            System.out.println("----- 예약 내역 -----");
-            System.out.println("예약 내역 출력:");
-            System.out.println("고객 이름: " + customer.getName());
-            System.out.println("예약 ID: " + this.reservID);
-            System.out.println("방번호: " + room.getRoomID());
-            System.out.println("체크인 날짜: " + startDate);
-            System.out.println("체크아웃 날짜: " + endDate);
-            int days = (int)java.time.Duration.between(startDate, endDate).toDays()+1;
-            System.out.println("가격: " + room.getPrice() * days + "원");
+    public void printReserv(Scanner sc, List<Reservation> reservations) {
+        System.out.println("===== 예약 정보 출력 =====");
+        System.out.print("예약 ID를 입력하세요: ");
+        int reservID = Integer.parseInt(sc.nextLine());
+        Reservation foundReservation = reservations.stream()
+            .filter(r -> r.getReservID() == reservID)
+            .findFirst().orElse(null);
+        if (foundReservation != null) {
+            if (foundReservation.getReservID() == reservID) {
+                System.out.println("----- 예약 내역 -----");
+                System.out.println("예약 내역 출력:");
+                System.out.println("고객 이름: " + foundReservation.getCustomer().getName());
+                System.out.println("예약 ID: " + foundReservation.getReservID());
+                System.out.println("방번호: " + foundReservation.getRoom().getRoomID());
+                System.out.println("체크인 날짜: " + foundReservation.getStartDate());
+                System.out.println("체크아웃 날짜: " + foundReservation.getEndDate());
+                int days = (int)java.time.Duration.between(foundReservation.getStartDate(), foundReservation.getEndDate()).toDays() + 1;
+                System.out.println("가격: " + foundReservation.getRoom().getPrice() * days + "원");
+            } else {
+                System.out.println("해당 예약 ID를 찾을 수 없습니다.");
+            }
         } else {
-            System.out.println("해당 예약 ID를 찾을 수 없습니다.");
+            System.out.println("예약을 찾을 수 없습니다.");
         }
+        System.out.println();
     }
 
     public void deleteReserv() {

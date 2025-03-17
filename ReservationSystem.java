@@ -16,12 +16,14 @@ public class ReservationSystem {
         this.rooms = rooms;
     }
 
+    // 예약 list[]에 추가
     public Reservation addReservation(Customer customer, Room room, Customer members, LocalDateTime startDate, LocalDateTime endDate) {
         Reservation reservation = new Reservation(customer, room, members, startDate, endDate);
         reservations.add(reservation);
         return reservation;
     }
 
+    // 예약가능한 방 수 출력
     public Map<String, Long> getAvailableRoomCounts(LocalDateTime startDate, LocalDateTime endDate) {
         return rooms.stream()
                 .filter(room -> reservations.stream()
@@ -30,6 +32,7 @@ public class ReservationSystem {
                 .collect(Collectors.groupingBy(Room::getType, Collectors.counting()));
     }
 
+    // 예약가능한 방 출력
     public List<Room> getAvailableRooms(LocalDateTime startDate, LocalDateTime endDate) {
         return rooms.stream()
                 .filter(room -> reservations.stream()
@@ -38,7 +41,7 @@ public class ReservationSystem {
                 .collect(Collectors.toList());
     }
 
-        // 고객 정보 저장
+    // 고객 정보 저장
     public void saveInfo(Customer customer, int reservID, int members) {
         try {
             String fileName;
@@ -59,23 +62,34 @@ public class ReservationSystem {
         }
     }
 
-    public void checkIn(int reservID) {
-        for (Reservation reservation : reservations) {
-            if (reservation.getReservID() == reservID) {
-                System.out.println("예약번호 " + reservation.getReservID() + "로 체크인 완료.");
-                for (Room room : rooms) {
-                    if (room.getRoomID() == reservation.getRoom().getRoomID()) {
-                        System.out.println("방 번호는 " + room.getRoomID() + "입니다. 즐거운 시간 되세요!");
-                        room.setFull(true);
-                        break;
+    public void checkIn(Scanner sc) {
+        System.out.println("===== 체크인 =====");
+        System.out.print("체크인할 예약 ID를 입력하세요: ");
+        try {
+            int reservID = Integer.parseInt(sc.nextLine());
+            for (Reservation reservation : reservations) {
+                if (reservation.getReservID() == reservID) {
+                    System.out.println("예약번호 " + reservation.getReservID() + "로 체크인 완료.");
+                    for (Room room : rooms) {
+                        if (room.getRoomID() == reservation.getRoom().getRoomID()) {
+                            System.out.println("방 번호는 " + room.getRoomID() + "입니다. 즐거운 시간 되세요!");
+                            room.setFull(true);
+                            break;
+                        }
                     }
+                    return;
                 }
-                break;
             }
+            System.out.println("유효한 예약 ID(숫자)를 입력하세요.");
+        } catch (NumberFormatException e) {
+            System.out.println("유효한 예약 ID(숫자)를 입력하세요.");
         }
+        System.out.println();
     }
 
     public void checkOut(int reservID) {
+        System.out.println("===== 체크아웃 =====");
+        System.out.print("체크아웃할 예약 ID를 입력하세요: ");
         for (Reservation reservation : reservations) {
             if (reservation.getReservID() == reservID) {
                 System.out.println("예약번호 " + reservation.getReservID() + "로 체크아웃 완료.");
